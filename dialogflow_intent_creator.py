@@ -4,12 +4,9 @@ import json
 import logging
 from dotenv import load_dotenv
 from google.cloud import dialogflow
-from .error_handler import error_handler
 
 
 logger = logging.getLogger(__name__)
-
-
 
 
 def deserialize_phrases(path):
