@@ -1,15 +1,16 @@
 import os
 import requests
+import json
 from dotenv import load_dotenv
 
 from google.cloud import dialogflow
 
 
-def parse_json_data(url):
-    response = requests.get(url)
-    response.raise_for_status()
-    decoded_responce = response.json()
-    return decoded_responce
+def deserialize_phrases(path):
+    with open(path, "r") as file:
+        phrases_json = file.read()
+    deserialized_phrases = json.loads(phrases_json)
+    return deserialized_phrases
 
 
 def create_intent(project_id, display_name, training_phrases_parts, answer):
@@ -19,7 +20,6 @@ def create_intent(project_id, display_name, training_phrases_parts, answer):
     training_phrases = []
     for training_phrases_part in training_phrases_parts:
         part = dialogflow.Intent.TrainingPhrase.Part(text=training_phrases_part)
-        # Here we create a new training phrase for each provided part.
         training_phrase = dialogflow.Intent.TrainingPhrase(parts=[part])
         training_phrases.append(training_phrase)
 
@@ -39,10 +39,8 @@ def create_intent(project_id, display_name, training_phrases_parts, answer):
 def main():
     load_dotenv()
     project_id = os.getenv("PROJECT_ID")
-    phrases_url = \
-        "https://dvmn.org/media/filer_public/a7/db/a7db66c0-1259-4dac-9726-2d1fa9c44f20/questions.json"
-    deserialized_phrases = parse_json_data(phrases_url)
-
+    phrases_path = os.getenv("TRAINING_PHRASES_PATH")
+    deserialized_phrases = deserialize_phrases(phrases_path)
     for display_name in deserialized_phrases:
         questions = deserialized_phrases[display_name]["questions"]
         answer = [deserialized_phrases[display_name]["answer"]]
