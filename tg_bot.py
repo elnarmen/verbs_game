@@ -1,6 +1,7 @@
 import os
 import logging
-
+import traceback
+import telegram
 from telegram import Update, ForceReply
 
 from telegram.ext import (
@@ -15,12 +16,18 @@ from google.cloud import dialogflow
 from functools import partial
 
 
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
-)
-
 logger = logging.getLogger(__name__)
+
+
+def error_handler(update: Update, context: CallbackContext, bot, chat_id) -> None:
+    error_message = ''.join(
+        traceback.format_exception(
+            None,
+            context.error,
+            context.error.__traceback__
+        )
+    )
+    bot.send_message(chat_id=chat_id, text=error_message)
 
 
 def start(update: Update, context: CallbackContext) -> None:
@@ -36,7 +43,6 @@ def detect_intent_texts(update: Update, context: CallbackContext, project_id):
     language_code = 'ru'
     session_client = dialogflow.SessionsClient()
     session = session_client.session_path(project_id, session_id)
-
     text_input = dialogflow.TextInput(
         text=update.message.text, language_code=language_code
     )
@@ -50,10 +56,17 @@ def detect_intent_texts(update: Update, context: CallbackContext, project_id):
 def main():
     load_dotenv()
     project_id = os.getenv('PROJECT_ID')
-    TG_TOKEN = os.getenv('TG_TOKEN')
+    tg_token = os.getenv('TG_TOKEN')
+    chat_id = os.getenv('CHAT_ID')
 
-    updater = Updater(TG_TOKEN)
+    bot = telegram.Bot(token=tg_token)
+
+    logger.setLevel(logging.INFO)
+    updater = Updater(tg_token, use_context=True)
     dispatcher = updater.dispatcher
+    dispatcher.add_error_handler(
+        partial(error_handler, bot=bot, chat_id=chat_id)
+    )
     dispatcher.add_handler(CommandHandler('start', start))
     dispatcher.add_handler(MessageHandler(
         Filters.text & ~Filters.command,
