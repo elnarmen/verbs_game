@@ -129,7 +129,7 @@ GOOGLE_APPLICATION_CREDENTIALS='path/to/file'
     },
 }
 ```
-Сохраните полученный файл и укажите путь к нему в переменной `TRAINING_PHRASES_PATH` в файле `.env`
+Сохраните json-файл и укажите путь к нему в переменной `TRAINING_PHRASES_PATH` в файле `.env`
 
 ```
 TRAINING_PHRASES_PATH='path/to/json'
