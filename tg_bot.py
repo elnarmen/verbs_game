@@ -1,7 +1,7 @@
 import os
 import logging
-import traceback
 import telegram
+import traceback
 from telegram import Update, ForceReply
 
 from telegram.ext import (
@@ -56,16 +56,13 @@ def detect_intent_texts(update: Update, context: CallbackContext, project_id):
 def main():
     load_dotenv()
     project_id = os.getenv('PROJECT_ID')
-    tg_token = os.getenv('TG_TOKEN')
-    chat_id = os.getenv('CHAT_ID')
+    logs_chat_id = os.getenv('LOGS_TELEGRAM_CHAT_ID')
+    logs_bot = telegram.Bot(token=os.getenv('LOGS_TELEGRAM_BOT_TOKEN'))
 
-    bot = telegram.Bot(token=tg_token)
-
-    logger.setLevel(logging.INFO)
-    updater = Updater(tg_token, use_context=True)
+    updater = Updater(os.getenv('TELEGRAM_TOKEN'), use_context=True)
     dispatcher = updater.dispatcher
     dispatcher.add_error_handler(
-        partial(error_handler, bot=bot, chat_id=chat_id)
+        partial(error_handler, bot=logs_bot, chat_id=logs_chat_id)
     )
     dispatcher.add_handler(CommandHandler('start', start))
     dispatcher.add_handler(MessageHandler(
