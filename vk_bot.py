@@ -2,6 +2,7 @@ import os
 import random
 import logging
 import telegram
+import traceback
 import vk_api as vk
 from vk_api.longpoll import VkLongPoll, VkEventType
 from dotenv import load_dotenv
