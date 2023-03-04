@@ -63,5 +63,4 @@ if __name__ == '__main__':
             try:
                 detect_intent_texts(event, vk_api, project_id)
             except Exception as err:
-                logger.exception(err)
-                send_log(str(err), logs_telegram_bot, logs_chat_id)
+                send_log(err, logs_telegram_bot, logs_chat_id)
