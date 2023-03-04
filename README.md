@@ -50,10 +50,22 @@ pip install -r requirements.txt
 * Через поиск телеграм найдите бот @BotFather. 
 * Отправьте `/start` для получения списока всех его команд.
 * Выберите команду /newbot - бот попросит придумать имя вашему новому боту. 
-* Сохраните полученный токен в переменной `TG_TOKEN` в файле `.env`:
+Необходимо создать два бота - основной бот и бот, который будет получать сообщения о логах
+* Сохраните полученные токены в переменных `TELEGRAM_BOT_TOKEN` и LOGS_TELEGRAM_BOT_TOKEN в файле `.env`:
 
 ```
-TG_TOKEN=<Токен для вашего бота>
+TELEGRAM_TOKEN=<Токен для основного бота>
+
+LOGS_TELEGRAM_BOT_TOKEN = <Токен для бота логов>
+
+```
+
+#### LOGS_TELEGRAM_CHAT_ID
+Чтобы получить свой chat_id, напишите в Telegram специальному боту: `@userinfobot`
+
+Сохраните chat_id в переменной `LOGS_TELEGRAM_CHAT_ID` в файле `.env`:
+```
+LOGS_TELEGRAM_CHAT_ID=<Ваш chat_id>
 ```
 
 #### VK_TOKEN
