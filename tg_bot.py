@@ -14,6 +14,7 @@ from telegram.ext import (
 from dotenv import load_dotenv
 from google.cloud import dialogflow
 from functools import partial
+from dialogflow_handlers import detect_intent_texts
 
 
 logger = logging.getLogger(__name__)
@@ -38,19 +39,11 @@ def start(update: Update, context: CallbackContext) -> None:
     )
 
 
-def detect_intent_texts(update: Update, context: CallbackContext, project_id):
+def send_message(update: Update, context: CallbackContext, project_id):
     session_id = update.effective_user.id
-    language_code = 'ru'
-    session_client = dialogflow.SessionsClient()
-    session = session_client.session_path(project_id, session_id)
-    text_input = dialogflow.TextInput(
-        text=update.message.text, language_code=language_code
-    )
-    query_input = dialogflow.QueryInput(text=text_input)
-    response = session_client.detect_intent(
-        request={'session': session, 'query_input': query_input}
-    )
-    update.message.reply_text(response.query_result.fulfillment_text)
+    text = update.message.text
+    response = detect_intent_texts(project_id, session_id, text)
+    update.message.reply_text(response.fulfillment_text)
 
 
 def main():
@@ -67,7 +60,7 @@ def main():
     dispatcher.add_handler(CommandHandler('start', start))
     dispatcher.add_handler(MessageHandler(
         Filters.text & ~Filters.command,
-        partial(detect_intent_texts, project_id=project_id)
+        partial(send_message, project_id=project_id)
     ))
 
     updater.start_polling()
