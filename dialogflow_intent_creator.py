@@ -6,9 +6,6 @@ from dotenv import load_dotenv
 from google.cloud import dialogflow
 
 
-logger = logging.getLogger(__name__)
-
-
 def get_phrases_from_file(path):
     with open(path, 'r') as file:
         phrases_json = file.read()
