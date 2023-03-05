@@ -48,7 +48,7 @@ def detect_intent_texts(update: Update, context: CallbackContext, project_id):
     )
     query_input = dialogflow.QueryInput(text=text_input)
     response = session_client.detect_intent(
-        request={"session": session, "query_input": query_input}
+        request={'session': session, 'query_input': query_input}
     )
     update.message.reply_text(response.query_result.fulfillment_text)
 
