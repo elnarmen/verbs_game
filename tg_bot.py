@@ -34,7 +34,6 @@ def start(update: Update, context: CallbackContext) -> None:
 
 
 def send_message(update: Update, context: CallbackContext, project_id):
-    1/0
     session_id = update.effective_user.id
     text = update.message.text
     response = detect_intent_texts(project_id, session_id, text)
