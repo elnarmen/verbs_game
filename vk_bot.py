@@ -35,7 +35,7 @@ def detect_intent_texts(event, vk_api, project_id):
     )
     query_input = dialogflow.QueryInput(text=text_input)
     response = session_client.detect_intent(
-        request={"session": session, "query_input": query_input}
+        request={'session': session, 'query_input': query_input}
     )
 
     if not response.query_result.intent.is_fallback:
