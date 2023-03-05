@@ -51,5 +51,5 @@ def main():
         create_intent(project_id, display_name, questions, answer)
 
 
-if __name__ == '__main_':
+if __name__ == '__main__':
     main()
