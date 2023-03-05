@@ -9,7 +9,7 @@ from google.cloud import dialogflow
 logger = logging.getLogger(__name__)
 
 
-def deserialize_phrases(path):
+def get_phrases_from_file(path):
     with open(path, "r") as file:
         phrases_json = file.read()
     deserialized_phrases = json.loads(phrases_json)
