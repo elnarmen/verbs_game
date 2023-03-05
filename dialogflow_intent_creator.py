@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_phrases_from_file(path):
-    with open(path, "r") as file:
+    with open(path, 'r') as file:
         phrases_json = file.read()
     deserialized_phrases = json.loads(phrases_json)
     return deserialized_phrases
@@ -33,22 +33,22 @@ def create_intent(project_id, display_name, training_phrases_parts, answer):
     )
 
     response = intents_client.create_intent(
-        request={"parent": parent, "intent": intent}
+        request={'parent': parent, 'intent': intent}
     )
 
-    print("Intent created: {}".format(response))
+    print('Intent created: {}'.format(response))
 
 
 def main():
     load_dotenv()
     project_id = os.getenv("PROJECT_ID")
     phrases_path = os.getenv("TRAINING_PHRASES_PATH")
-    deserialized_phrases = deserialize_phrases(phrases_path)
-    for display_name in deserialized_phrases:
-        questions = deserialized_phrases[display_name]["questions"]
-        answer = [deserialized_phrases[display_name]["answer"]]
+    phrases = get_phrases_from_file(phrases_path)
+    for display_name, phrase in phrases.items():
+        questions = phrase['questions']
+        answer = [phrase['answer']]
         create_intent(project_id, display_name, questions, answer)
 
 
-if __name__ == "__main__":
+if __name__ == '__main_':
     main()
