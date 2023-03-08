@@ -11,7 +11,7 @@
 
 Скачайте код:
 ```sh
-git clone https://github.com/PaSeRouS/verbs_game.git
+git clone https://github.com/elnarmen/verbs_game.git
 ```
 
 Перейдите в каталог проекта:
